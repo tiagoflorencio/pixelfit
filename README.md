@@ -99,6 +99,6 @@ src/lib/image.js       Decodificação (incluindo HEIC), canvas e codificação
 
 <div align="center">
 
-Feito com 💜 por [Tiago Jesus](https://www.tiagojesus.dev.br)
+Feito  por [Tiago Jesus](https://www.tiagojesus.dev.br)
 
 </div>
