@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PixelFit | Ferramentas de imagem online</title>
+    <meta
+      name="description"
+      content="Converta, redimensione, recorte e otimize imagens em lote direto no navegador. Gratuito e sem enviar seus arquivos para nenhum servidor."
+    />
+    <meta name="theme-color" content="#4f46e5" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="#/" aria-label="PixelFit - página inicial">
+          <svg class="brand-logo" viewBox="0 0 64 64" aria-hidden="true">
+            <defs>
+              <linearGradient id="logo-gradient" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#4f46e5" />
+                <stop offset="1" stop-color="#06b6d4" />
+              </linearGradient>
+            </defs>
+            <rect width="64" height="64" rx="16" fill="url(#logo-gradient)" />
+            <g
+              fill="none"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M14 22v-6a2 2 0 0 1 2-2h6" />
+              <path d="M42 14h6a2 2 0 0 1 2 2v6" />
+              <path d="M50 42v6a2 2 0 0 1-2 2h-6" />
+              <path d="M22 50h-6a2 2 0 0 1-2-2v-6" />
+            </g>
+            <circle cx="36" cy="25" r="3" fill="#fff" />
+            <path
+              d="M22 41l7.5-10 5.5 7 3-4 4 7z"
+              fill="#fff"
+              stroke="#fff"
+              stroke-width="2"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span class="brand-name">PixelFit</span>
+        </a>
+        <span class="badge">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2l8 3v6c0 5-3.4 9.4-8 11-4.6-1.6-8-6-8-11V5z" />
+            <path d="M9 12l2 2 4-4" />
+          </svg>
+          Arquivos processados no seu navegador
+        </span>
+      </div>
+    </header>
+
+    <main class="page" id="app"></main>
+
+    <footer class="footer">
+      <p>
+        PixelFit &middot; Suas imagens locais não são enviadas para nenhum
+        servidor.
+      </p>
+    </footer>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

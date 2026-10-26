@@ -1,0 +1,253 @@
+<div class="layout">
+  <div class="col-main">
+    <section class="card">
+      <div class="tabs" role="tablist">
+        <button
+          class="tab is-active"
+          role="tab"
+          id="tab-files"
+          aria-selected="true"
+          aria-controls="panel-files"
+          type="button"
+        >
+          Arquivos locais
+        </button>
+        <button
+          class="tab"
+          role="tab"
+          id="tab-sheet"
+          aria-selected="false"
+          aria-controls="panel-sheet"
+          type="button"
+        >
+          Planilha com URLs
+        </button>
+      </div>
+
+      <div id="panel-files" class="panel" role="tabpanel">
+        <div class="dropzone" id="dropzone">
+          <div class="dropzone-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 16V4" />
+              <path d="M7 9l5-5 5 5" />
+              <path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" />
+            </svg>
+          </div>
+          <p class="dropzone-title">Arraste suas imagens aqui</p>
+          <p class="muted">PNG, JPG, WebP, AVIF, TIFF ou HEIC (iPhone)</p>
+          <div class="row center">
+            <label class="btn btn-primary">
+              Selecionar imagens
+              <input id="pick-images" type="file" accept="image/*,.heic,.heif" multiple />
+            </label>
+            <label class="btn btn-ghost">
+              Selecionar pasta
+              <input
+                id="pick-folder"
+                type="file"
+                accept="image/*,.heic,.heif"
+                multiple
+                webkitdirectory
+                directory
+              />
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div id="panel-sheet" class="panel" role="tabpanel" hidden>
+        <p class="muted">
+          Envie um arquivo CSV ou XLSX com links HTTP/HTTPS de imagens em uma
+          coluna (por exemplo: imagem, image, url, arquivo, caminho). O servidor
+          das imagens precisa permitir acesso (CORS).
+        </p>
+        <div class="row align-end">
+          <label class="btn btn-primary">
+            Enviar planilha
+            <input id="pick-sheet" type="file" accept=".csv,.xlsx,.xls" />
+          </label>
+          <label class="field">
+            <span>Nome da coluna (opcional)</span>
+            <input id="sheet-column" type="text" placeholder="imagem" />
+          </label>
+        </div>
+        <p class="notice" id="sheet-warning" role="status"></p>
+      </div>
+    </section>
+
+    <section class="card" id="queue-card" hidden>
+      <div class="card-head">
+        <h2>Fila de conversão <span class="pill" id="queue-count">0</span></h2>
+        <button class="link-btn" id="clear-queue" type="button">
+          Remover todas
+        </button>
+      </div>
+      <div class="queue-grid" id="queue-grid"></div>
+    </section>
+  </div>
+
+  <aside class="col-side">
+    <section class="card settings">
+      <h2>Configurações</h2>
+
+      <div class="field">
+        <span>Predefinições</span>
+        <div class="chips" id="presets" role="group">
+          <button type="button" class="chip is-active" data-preset="marketplace">
+            Marketplace
+          </button>
+          <button type="button" class="chip" data-preset="web">Web</button>
+          <button type="button" class="chip" data-preset="social">
+            Redes sociais
+          </button>
+          <button type="button" class="chip" data-preset="email">E-mail</button>
+          <button type="button" class="chip" data-preset="custom">
+            Personalizado
+          </button>
+        </div>
+        <small class="hint" id="preset-hint"></small>
+      </div>
+
+      <label class="field">
+        <span>Formato de saída</span>
+        <select id="format">
+          <option value="webp">WebP (recomendado)</option>
+          <option value="avif">AVIF (menor tamanho)</option>
+          <option value="jpeg">JPEG (compatível)</option>
+          <option value="png">PNG (sem perdas)</option>
+          <option value="svg">SVG (vetorizado, ideal para logos)</option>
+        </select>
+      </label>
+
+      <div class="two-cols">
+        <label class="field">
+          <span>Tamanho máximo (KB)</span>
+          <input id="max-kb" type="number" min="10" step="10" value="1024" />
+        </label>
+        <label class="field">
+          <span>Maior lado (px)</span>
+          <input
+            id="max-dimension"
+            type="number"
+            min="320"
+            step="10"
+            value="2500"
+          />
+        </label>
+      </div>
+
+      <details class="advanced">
+        <summary>Opções avançadas</summary>
+        <div class="two-cols">
+          <label class="field">
+            <span>Qualidade mínima (%)</span>
+            <input id="quality-min" type="number" min="1" max="100" value="40" />
+          </label>
+          <label class="field">
+            <span>Qualidade máxima (%)</span>
+            <input id="quality-max" type="number" min="1" max="100" value="90" />
+          </label>
+        </div>
+        <small class="hint">
+          O app tenta da maior para a menor qualidade e, se necessário, reduz as
+          dimensões até atingir o tamanho máximo. Em JPEG, fundos transparentes
+          ficam brancos. Em SVG, a imagem é vetorizada: a qualidade define o
+          número de cores (funciona melhor em logos e ilustrações do que em
+          fotos) e o maior lado é limitado a 1000 px no traçado.
+        </small>
+      </details>
+
+      <p class="error-text" id="settings-error" role="alert"></p>
+
+      <small class="hint privacy-hint">
+        Privacidade: metadados como GPS e dados da câmera são removidos
+        automaticamente das imagens geradas.
+      </small>
+
+      <div class="actions">
+        <button id="run" class="btn btn-primary btn-lg" type="button">
+          Converter imagens
+        </button>
+        <button id="zip" class="btn btn-ghost" type="button" disabled>
+          Baixar tudo (.zip)
+        </button>
+        <button id="clear" class="link-btn" type="button">Limpar tudo</button>
+      </div>
+
+      <div class="progress" id="progress" hidden>
+        <div class="progress-bar"><span id="progress-fill"></span></div>
+        <small class="muted" id="progress-label"></small>
+      </div>
+    </section>
+  </aside>
+</div>
+
+<section class="card" id="results-block" hidden>
+  <div class="card-head">
+    <h2>Resultado</h2>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <span class="stat-label">Convertidas</span>
+      <strong id="stat-ok">0</strong>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Tamanho original</span>
+      <strong id="stat-original">-</strong>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Tamanho final</span>
+      <strong id="stat-final">-</strong>
+    </div>
+    <div class="stat stat-accent">
+      <span class="stat-label">Economia</span>
+      <strong id="stat-saved">-</strong>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Imagem</th>
+          <th>Status</th>
+          <th>Original</th>
+          <th>Final</th>
+          <th>Economia</th>
+          <th>Dimensões</th>
+          <th class="right">Ações</th>
+        </tr>
+      </thead>
+      <tbody id="results-body"></tbody>
+    </table>
+  </div>
+</section>
+
+<dialog id="preview-dialog" class="dialog">
+  <div class="dialog-head">
+    <div>
+      <h3 id="preview-title"></h3>
+      <p class="muted" id="preview-meta"></p>
+    </div>
+    <button class="icon-btn" id="preview-close" type="button" aria-label="Fechar">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6 6l12 12M18 6L6 18" />
+      </svg>
+    </button>
+  </div>
+  <div class="compare">
+    <figure>
+      <div class="compare-img">
+        <img id="preview-before" alt="Imagem original" />
+      </div>
+      <figcaption id="preview-before-caption"></figcaption>
+    </figure>
+    <figure>
+      <div class="compare-img">
+        <img id="preview-after" alt="Imagem convertida" />
+      </div>
+      <figcaption id="preview-after-caption"></figcaption>
+    </figure>
+  </div>
+</dialog>
